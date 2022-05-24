@@ -17,7 +17,7 @@ public class Encrypt {
         String textFile = readfiles(TextFile);
         System.out.println("====Read FileKey=====");
         String PkText = readfiles(InputKey);
-        String[] pgk = sortPK(PkText);
+        String[] pgk = sortPK(PkText); // PK file
         System.out.println("====Convert FileText to Binary====");
         String textBinary = convertStringtoBinary(textFile);
         System.out.println(textBinary);
@@ -31,6 +31,7 @@ public class Encrypt {
         FileWriter(encrypt,extraZero,SPresult);
     }
 
+    //Input
     public static void Input() {
         System.out.println("====TextFile====");
         TextFile = sc.nextLine();
@@ -38,6 +39,7 @@ public class Encrypt {
         InputKey = sc.nextLine();
     }
 
+    //Readfile from .txt
     public static String readfiles(String Filename) {
         String charac = "";
         try {
@@ -55,6 +57,7 @@ public class Encrypt {
         return charac;
     }
 
+    //Convert String in file to binary
     public static String convertStringtoBinary(String text) {
         StringBuilder result = new StringBuilder();
         char[] chars = text.toCharArray();
@@ -73,7 +76,7 @@ public class Encrypt {
         System.out.println("decimal: " + Arrays.toString(decimal));
         return decimal;
     }
-
+    // sort including textBinary,textLength , PK 
     public static String[] sortBinary(String textBinary, String textLength, String[] p) {
         String[] newArr;
         boolean check = true;
@@ -89,13 +92,15 @@ public class Encrypt {
         }
         System.out.println("textBinaryLength: " + textBinary.length());
         System.out.println("extraZero: " + extraZero);
-        String[] temp = textBinary.split("");
 
+        //split textBinry after add 0 to fix block size
+        String[] temp = textBinary.split("");
         System.out.println("templength: " + temp.length);
 
         String[] result = new String[(textLength.length() * 8) / SPresult];
         // String truetemp[] = checkTemp(temp);
-
+        
+        //check how many block should have from text in .txt
         if ((textLength.length() * 8) % SPresult != 0) {
             newArr = new String[result.length + 1];
             for (int i = 0; i < result.length; i++) {
@@ -125,6 +130,7 @@ public class Encrypt {
         return newArr;
     }
 
+    //spilt PK file to p,g,y
     public static String[] sortPK(String PkText) {
         String[] splited = PkText.split("\\s+");
         System.out.println("spilt: " + Arrays.toString(splited));
@@ -163,7 +169,7 @@ public class Encrypt {
         }
         return res;
     }
-
+    //encrypts a b 
     public static String[] Encrypts(long[] arrLong, String[] pgk) {
         String[] AB = new String[arrLong.length];
         long p = Long.parseLong(pgk[0]);

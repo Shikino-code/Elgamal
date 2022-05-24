@@ -18,8 +18,8 @@ public class Decrypt extends Encrypt {
         System.out.println("====Read ETCFile=====");
         String PaddingText = readfiles(Padding);
         System.out.println("====sort====");
-        String[] etc = sortETC(PaddingText);
-        String[] cipherTextSpilt = sort(cipherText);
+        String[] etc = sortETC(PaddingText); //spilt etc
+        String[] cipherTextSpilt = sort(cipherText); //
         String[] Sktext = sort(SkText);
         System.out.println("====Decrypt====");
         long[] result = Decrypts(cipherTextSpilt, Sktext);
@@ -66,6 +66,7 @@ public class Decrypt extends Encrypt {
         return charac;
     }
 
+    //spilt a b
     public static String[] sort(String CypherText) {
         String[] splited = CypherText.split("\\s+");
         System.out.println("sort: " + Arrays.toString(splited));
@@ -87,6 +88,7 @@ public class Decrypt extends Encrypt {
         return res;
     }
 
+    //decrypt with p,u,cyphertext
     public static long[] Decrypts(String[] cypherTextSpilt, String[] SkText) {
         long p = Long.parseLong(SkText[0]);
         long u = Long.parseLong(SkText[2]);
@@ -107,6 +109,7 @@ public class Decrypt extends Encrypt {
         return result;
     }
 
+    
     public static String[] converDataTypeToString(long[] result, String[] etc) {
         int boxsize = Integer.valueOf(etc[1]);
         String[] results = new String[result.length];
@@ -120,6 +123,7 @@ public class Decrypt extends Encrypt {
         return results;
     }
 
+    //delete 0 that we add in encrypt
     public static String[] DeletePadding(String[] binary, String[] etc) {
         String r = String.valueOf(binary[binary.length - 1]);
         int extra = Integer.valueOf(etc[0]);
@@ -148,6 +152,7 @@ public class Decrypt extends Encrypt {
         return binary;
     }
 
+    // ressemble to binary
     public static String mix(String[] binaryFinish) {
         String binary = "";
         String result = "";
@@ -157,7 +162,7 @@ public class Decrypt extends Encrypt {
         }
         String[] temp = binary.split("");
         int condi = ((temp.length / 8) + (temp.length % 8));
-        System.out.println("test: " + condi);
+        System.out.println("Blocks: " + condi);
         System.out.println(temp.length);
         for (int i = 0; i < condi; i++) {
             for (int j = 0; j < 8; j++) {
