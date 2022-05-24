@@ -164,7 +164,7 @@ public class Decrypt extends Encrypt {
                 result += temp[k++];
             }
             result += " ";
-            System.out.println("mixs: "+result);
+            System.out.println("mix: "+result);
         }
         System.out.println("mix: " + result);
         return result;
