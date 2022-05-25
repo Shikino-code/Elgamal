@@ -5,40 +5,49 @@ import java.util.Scanner; // Import the Scanner class to read text files
 import java.io.FileWriter; //import the FileWriter class to write text files
 import java.io.IOException; // Import the IOException class
 
-
 public class readFile {
   static Scanner sc = new Scanner(System.in);
   static String Filename;
   static long bits;
 
   public static void main(String[] args) throws IOException {
+
     System.out.println("====Input====");
     Input();
-    System.out.println("====ReadFile====");
+
+    System.out.println("====Read File====");
     String text = readfiles(Filename);
-    System.out.println("====convert====");
+
+    System.out.println("====Convert====");
     String num = convertStringtoBinary(text);
+
     System.out.println(num);
+
     String s = conditionInput(num);
+
     System.out.println("====Correct====");
     System.out.println(s);
-    System.out.println("====cutZero====");
+
+    System.out.println("====Cut Zero====");
     String resultBinary = customizeBinary(s, bits);
-    System.out.println("====BinaryToDecinal====");
-    long decimal = BinaryToDecimal(resultBinary); // ตัวแปรเก็บเลขฐาน 10
-    System.out.println("====CheckSafePrime====");
+
+    System.out.println("====Binary to Decimal====");
+    long decimal = BinaryToDecimal(resultBinary);
+
+    System.out.println("====Check SafePrime====");
     long SafePrime = CheckPrime(decimal);
     long Generator = FineKeyGen(SafePrime);
-    CreateKey(Generator, SafePrime);;
+
+    CreateKey(Generator, SafePrime);
   }
 
-  //Input
+  // Input
   public static void Input() {
     System.out.println("input Filename");
     Filename = sc.nextLine();
   }
 
-  //ReadFile from .txt
+  // ReadFile from .txt
   public static String readfiles(String Filename) {
     String charac = "";
     try {
@@ -56,9 +65,10 @@ public class readFile {
     return charac;
   }
 
-  //Check Safe Prime
+  // Check Safe Prime
   public static long CheckPrime(long decimal) {
     long n = decimal;
+
     for (int i = 0; i < n; i++) {
       if (prime(n)) {
         System.out.println(n + " " + "is prime");
@@ -76,22 +86,24 @@ public class readFile {
     return n;
   }
 
-  //ConvertStringToBinary
+  // ConvertStringToBinary
   public static String convertStringtoBinary(String text) {
     StringBuilder result = new StringBuilder();
     char[] chars = text.toCharArray();
+
     for (char aChar : chars) {
       result.append(String.format("%8s", Integer.toBinaryString(aChar)).replaceAll(" ", "0"));
     }
+
     return result.toString();
   }
 
-  //Check Input is match with Condition
+  // Check Input is match with Condition
   public static String conditionInput(String num) {
     boolean check = true;
     System.out.println("====Check====");
 
-    //How many numbers does each block have and must be less long datatype
+    // How many numbers does each block have and must be less long datatype
     System.out.println("input bit less than " + (long) (Math.log(Long.MAX_VALUE) / Math.log(2) / 2));
     bits = sc.nextInt();
 
@@ -103,12 +115,13 @@ public class readFile {
       System.out.println("exit program");
       System.exit(0);
     }
-    //print Select number each block
+
+    // print Select number each block
     System.out.println("bits: " + bits);
-    //Input after convert to binary,How much it have range?
+    // Input after convert to binary,How much it have range?
     System.out.println("string length: " + num.length());
 
-    //check if select number each block have more than input?
+    // check if select number each block have more than input?
     while (check == true) {
       if (num.length() < bits) {
         System.out.println("====text less than bits====");
@@ -119,7 +132,7 @@ public class readFile {
     return num;
   }
 
-  // cut zero in front of number in binary 
+  // cut zero in front of number in binary
   public static String customizeBinary(String num, long bits) {
     int i = 1;
     int j = 0;
@@ -128,7 +141,7 @@ public class readFile {
 
     String result = "";
 
-    //spilt binary to char
+    // spilt binary to char
     char[] ch = num.toCharArray();
     for (char c : ch) {
       if (j < bits) {
@@ -137,8 +150,8 @@ public class readFile {
         } else {
           start = false;
           result += String.valueOf(c);
-          System.out.println("count: " + i);
-          System.out.println("binary: " + result);
+          // System.out.println("count: " + i);
+          // System.out.println("binary: " + result);
           i++;
           j++;
         }
@@ -147,11 +160,11 @@ public class readFile {
 
     System.out.println("====RESULT====");
     System.out.println("result: " + result);
-    
+
     return result;
   }
 
-  //convert binary to decimal
+  // convert binary to decimal
   public static long BinaryToDecimal(String resultBinary) {
     long decimal = Integer.parseInt(resultBinary, 2);
     System.out.println("Decimal: " + decimal);
@@ -219,45 +232,50 @@ public class readFile {
         res = (res * x) % n;
 
       // y must be even now
+      // mod coz handle overflow
       y = y >> 1; // y = y/2
       x = x * x % n; // Change x to x^2
     }
     return res;
   }
 
-  //Find Generator
+  // Find Generator
   public static long FineKeyGen(long SafePrime) {
     long a = 1 + (long) (Math.random() * (SafePrime - 1));
     long pow = ((SafePrime - 1) / 2);
     System.out.println("====Find Key generator====");
 
     long result = power(a, pow, SafePrime);
-    System.out.println(result + " Check result");
+    // System.out.println(result + " Check result");
 
     if (result != 1 % SafePrime) {
-      System.out.println("====It's Key generator====");
+      System.out.println("---It's Key generator---");
       System.out.println(a);
+
       return a;
     } else {
-      System.out.println("====Not Key generator=====");
+      System.out.println("---Not Key generator---");
       long sum = ((a * -1) % SafePrime) + SafePrime;
-      System.out.println(a + " is Key generator now");
+
+      System.out.println("---Key generator---");
+      System.out.println(a);
+
       return sum;
     }
   }
-  
+
   public static void CreateKey(long Generator, long SafePrime) throws IOException {
     long g = Generator;
     long u = 1 + (long) (Math.random() * (SafePrime - 1));
-    System.out.println("====CreateKey====");
     long y = power(g, u, SafePrime);
 
-    System.out.println("====pulice Key including====");
-    System.out.println("P is : "+SafePrime);
-    System.out.println("G is : "+g);
+    System.out.println("====CreateKey====");
+    System.out.println("---pulice Key including---");
+    System.out.println("P is : " + SafePrime);
+    System.out.println("G is : " + g);
     System.out.println("Y is : " + y);
 
-    System.out.println("====Secret Key is====");
+    System.out.println("---Secret Key is---");
     System.out.println("U is : " + u);
     FileWriter(SafePrime, g, y, u);
   }
@@ -268,10 +286,13 @@ public class readFile {
     String fw_g = Long.toString(g);
     String fw_y = Long.toString(y);
     String fw_u = Long.toString(u);
+
     File myObj2 = new File("PK.txt");
     File myObj3 = new File("SK.txt");
+
     myObj2.createNewFile();
     myObj3.createNewFile();
+
     FileWriter fw = new FileWriter("PK.txt", true);
     try (FileWriter fw2 = new FileWriter("SK.txt", true)) {
       fw.write(fw_p + " ");
@@ -281,10 +302,7 @@ public class readFile {
       fw2.write(fw_g + " ");
       fw2.write(fw_u);
     }
-    System.out.println("Completed writing into text file");
     fw.close();
   }
 
 }
-
-
