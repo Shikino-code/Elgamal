@@ -11,42 +11,52 @@ public class Decrypt extends Encrypt {
 
     public static void main(String[] args) {
         Input();
+
         System.out.println("====Read FileText=====");
         String cipherText = readfiles(CipherText);
+
         System.out.println("====Read FileKey=====");
         String SkText = readfiles(Key);
+
         System.out.println("====Read ETCFile=====");
         String PaddingText = readfiles(Padding);
+
         System.out.println("====sort====");
-        String[] etc = sortETC(PaddingText); //spilt etc
-        String[] cipherTextSpilt = sort(cipherText); //
-        String[] Sktext = sort(SkText);
+        System.out.println("---etc---");
+        String[] etc = splits(PaddingText); 
+
+        System.out.println("---Cipher Text Spilt After split---");
+        String[] cipherTextSpilt = splits(cipherText);
+
+        System.out.println("--- SK File---");
+        String[] Sktext = splits(SkText);
+
         System.out.println("====Decrypt====");
         long[] result = Decrypts(cipherTextSpilt, Sktext);
-        System.out.println("====ConvertToBinary====");
+
+        System.out.println("====Convert to Binary====");
         String[] binary = converDataTypeToString(result, etc);
-        System.out.println("====DeletePadding====");
+
+        System.out.println("====Delete Padding====");
         String[] BinaryFinish = DeletePadding(binary, etc);
-        System.out.println("====mixBinary====");
-        String Mix = mix(BinaryFinish);
-        System.out.println("=====convertToText=====");
-        StringToBinary(Mix);
+
+        System.out.println("====Resemble Binart Text====");
+        String reform = reformBinary(BinaryFinish);
+
+        System.out.println("=====Convert to Text=====");
+        StringToBinary(reform);
 
     }
 
     public static void Input() {
         System.out.println("====CipherText====");
         CipherText = sc.nextLine();
+
         System.out.println("=====KeyFile=====");
         Key = sc.nextLine();
+
         System.out.println("=====ETCFile=====");
         Padding = sc.nextLine();
-    }
-
-    public static String[] sortETC(String PkText) {
-        String[] splited = PkText.split("\\s+");
-        System.out.println("spilt: " + Arrays.toString(splited));
-        return splited;
     }
 
     public static String readfiles(String Filename) {
@@ -67,9 +77,9 @@ public class Decrypt extends Encrypt {
     }
 
     //spilt a b
-    public static String[] sort(String CypherText) {
+    public static String[] splits(String CypherText) {
         String[] splited = CypherText.split("\\s+");
-        System.out.println("sort: " + Arrays.toString(splited));
+        System.out.println("spilt: " + Arrays.toString(splited));
         return splited;
     }
 
@@ -89,22 +99,27 @@ public class Decrypt extends Encrypt {
     }
 
     //decrypt with p,u,cyphertext
-    public static long[] Decrypts(String[] cypherTextSpilt, String[] SkText) {
+    public static long[] Decrypts(String[] CipherTextSplits, String[] SkText) {
         long p = Long.parseLong(SkText[0]);
         long u = Long.parseLong(SkText[2]);
+
         System.out.println("p: " + p);
         System.out.println("u: " + u);
-        long[] result = new long[cypherTextSpilt.length / 2];
-        System.out.println("ciphertext: " + Arrays.toString(cypherTextSpilt));
+
+        long[] result = new long[CipherTextSplits.length / 2];
+        System.out.println("Ciphertext: " + Arrays.toString(CipherTextSplits));
+
         int r = 1;
         int r2 = 0;
         long power = p - 1 - u;
+        
         for (int i = 0; i < result.length; i++) {
-            result[i] = (Long.parseLong(cypherTextSpilt[r]) * power(Long.parseLong(cypherTextSpilt[r2]), power, p)) % p;
+
+            result[i] = (Long.parseLong(CipherTextSplits[r]) * power(Long.parseLong(CipherTextSplits[r2]), power, p)) % p;
             r += 2;
             r2 += 2;
-
         }
+
         System.out.println("result: " + Arrays.toString(result));
         return result;
     }
@@ -112,76 +127,83 @@ public class Decrypt extends Encrypt {
     
     public static String[] converDataTypeToString(long[] result, String[] etc) {
         int boxsize = Integer.valueOf(etc[1]);
+
         String[] results = new String[result.length];
+
         for (int i = 0; i < results.length; i++) {
             results[i] = Long.toBinaryString(result[i]);
             if (results[i].length() != boxsize) {
                 results[i] = StringUtils.leftPad("" + results[i], boxsize, "0");
             }
         }
+
         System.out.println("results: " + Arrays.toString(results));
         return results;
     }
 
     //delete 0 that we add in encrypt
     public static String[] DeletePadding(String[] binary, String[] etc) {
-        String r = String.valueOf(binary[binary.length - 1]);
+        String lastBlock = String.valueOf(binary[binary.length - 1]);
         int extra = Integer.valueOf(etc[0]);
-        String[] temp = r.split("");
-        int condition = temp.length - extra;
-        String[] anotherArray = new String[condition];
-        for (int i = 0, k = 0; i < temp.length; i++) {
+
+        String[] splitDataInBlock = lastBlock.split("");
+        int condition = splitDataInBlock.length - extra;
+        String[] deletePaddingArr = new String[condition];
+
+        for (int i = 0, k = 0; i < splitDataInBlock.length; i++) {
 
             if (i == condition) {
                 condition++;
                 continue;
             }
-
-            anotherArray[k++] = temp[i];
+            deletePaddingArr[k++] = splitDataInBlock[i];
         }
-        System.out.println("another: " + Arrays.toString(anotherArray));
+        System.out.println("Delete Padding: " + Arrays.toString(deletePaddingArr));
 
-        for (int i = 0; i < anotherArray.length; i++) {
+        //Add data after delete padding to last block
+        for (int i = 0; i < deletePaddingArr.length; i++) {
             if (i == 0) {
-                binary[binary.length - 1] = anotherArray[i];
+                binary[binary.length - 1] = deletePaddingArr[i];
             } else {
-                binary[binary.length - 1] += anotherArray[i];
+                binary[binary.length - 1] += deletePaddingArr[i];
             }
         }
-        System.out.println("binary: " + Arrays.toString(binary));
+        System.out.println("Binary Text: " + Arrays.toString(binary));
         return binary;
     }
 
     // ressemble to binary
-    public static String mix(String[] binaryFinish) {
+    public static String reformBinary(String[] binaryText) {
         String binary = "";
         String result = "";
+
         int k = 0;
-        for (int i = 0; i < binaryFinish.length; i++) {
-            binary += binaryFinish[i];
+
+        for (int i = 0; i < binaryText.length; i++) {
+            binary += binaryText[i];
         }
+        
         String[] temp = binary.split("");
         int condi = ((temp.length / 8) + (temp.length % 8));
-        System.out.println("Blocks: " + condi);
-        System.out.println(temp.length);
+        
         for (int i = 0; i < condi; i++) {
             for (int j = 0; j < 8; j++) {
                 result += temp[k++];
             }
             result += " ";
-            System.out.println("mix: "+result);
+            //System.out.println("reform binary text: "+result);
         }
-        System.out.println("mix: " + result);
+        System.out.println("Result ressemble: " + result);
         return result;
     }
 
-    public static void StringToBinary(String Mix) {
-        String raw = Arrays.stream(Mix.split(" "))
+    public static void StringToBinary(String reform) {
+        String plainText = Arrays.stream(reform.split(" "))
                 .map(binary -> Integer.parseInt(binary, 2))
                 .map(Character::toString)
                 .collect(Collectors.joining()); // cut the space
 
-        System.out.println(raw);
+        System.out.println("Messaage = "+plainText);
     }
 
 }

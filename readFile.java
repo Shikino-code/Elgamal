@@ -119,12 +119,15 @@ public class readFile {
     return num;
   }
 
-  // cut zero in front of number in binary
+  // cut zero in front of number in binary 
   public static String customizeBinary(String num, long bits) {
     int i = 1;
     int j = 0;
+
     boolean start = true;
+
     String result = "";
+
     //spilt binary to char
     char[] ch = num.toCharArray();
     for (char c : ch) {
@@ -141,8 +144,10 @@ public class readFile {
         }
       }
     }
+
     System.out.println("====RESULT====");
     System.out.println("result: " + result);
+    
     return result;
   }
 
