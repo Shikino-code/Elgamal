@@ -1,6 +1,35 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "commons-lang-2.6.jar"
+        "commons-lang-2.6.jar",
+        "ant.jar",
+        "ant-junit.jar",
+        "ant-launcher.jar",
+        "ant-nodeps.jar",
+        "junit.jar",
+        "resolver.jar",
+        "serializer.jar",
+        "stylebook-1.0-b2.jar",
+        "xalan.jar",
+        "xercesImpl.jar",
+        "xml-apis.jar",
+        "JarFile/ant.jar",
+        "JarFile/ant-junit.jar",
+        "JarFile/ant-launcher.jar",
+        "JarFile/ant-nodeps.jar",
+        "JarFile/commons-lang-2.6.jar",
+        "JarFile/junit.jar",
+        "JarFile/resolver.jar",
+        "JarFile/serializer.jar",
+        "JarFile/stylebook-1.0-b2.jar",
+        "JarFile/xalan.jar",
+        "JarFile/xercesImpl.jar",
+        "JarFile/xml-apis.jar",
+        "JarFile/commons-codec-1.15.jar",
+        "JarFile/commons-codec-1.15-javadoc.jar",
+        "JarFile/commons-codec-1.15-sources.jar",
+        "JarFile/commons-codec-1.15-tests.jar",
+        "JarFile/commons-codec-1.15-test-sources.jar",
+        "JarFile/org-apache-commons-codec.jar"
     ]
 }

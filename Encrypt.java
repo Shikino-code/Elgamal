@@ -11,7 +11,7 @@ public class Encrypt {
     static int extraZero = 0;
     static int dataForEachBlocks;
 
-    public static void main(String[] args) throws IOException {
+    public static void main() throws IOException {
         Input();
         System.out.println("====Read FileText=====");
         String textFile = readfiles(TextFile);
@@ -86,7 +86,7 @@ public class Encrypt {
         dataForEachBlocks = (int) (Math.log(sp - 1) / Math.log(2));
 
        
-
+        System.out.println("Textbinary before add zero: " + textBinary.length());
         //Check The last block already Full?
         while (check == true) {
             if (textBinary.length() % dataForEachBlocks != 0) {

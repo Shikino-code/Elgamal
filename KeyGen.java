@@ -1,22 +1,34 @@
+import java.io.ByteArrayOutputStream;
 import java.io.File; // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
 
 import java.util.Scanner; // Import the Scanner class to read text files
+
+import javax.imageio.ImageIO;
+
 import java.io.FileWriter; //import the FileWriter class to write text files
 import java.io.IOException; // Import the IOException class
+import java.nio.file.Files;
 
-public class readFile {
+import java.io.*;
+import java.awt.image.*;
+import javax.imageio.*;
+
+
+
+public class KeyGen {
   static Scanner sc = new Scanner(System.in);
-  static String Filename;
   static long bits;
+  static String Filename;
 
-  public static void main(String[] args) throws IOException {
+  public static void main() throws IOException {
 
     System.out.println("====Input====");
-    Input();
+    String file = Input();
+
 
     System.out.println("====Read File====");
-    String text = readfiles(Filename);
+    String text = readfiles(file);
 
     System.out.println("====Convert====");
     String num = convertStringtoBinary(text);
@@ -42,26 +54,29 @@ public class readFile {
   }
 
   // Input
-  public static void Input() {
+  public static String Input() {
+
     System.out.println("input Filename");
     Filename = sc.nextLine();
+
+    return Filename;
   }
 
   // ReadFile from .txt
   public static String readfiles(String Filename) {
     String charac = "";
-    try {
-      File myObj = new File(Filename);
-      Scanner myReader = new Scanner(myObj);
-      while (myReader.hasNextLine()) {
-        charac = myReader.nextLine();
-        System.out.println(charac);
-      }
-      myReader.close();
-    } catch (FileNotFoundException e) {
-      System.out.println("An error occurred.");
-      e.printStackTrace();
-    }
+      try {
+        File myObj = new File(Filename);
+        Scanner myReader = new Scanner(myObj);
+        while (myReader.hasNextLine()) {
+          charac = myReader.nextLine();
+          System.out.println(charac);
+        }
+        myReader.close();
+      } catch (FileNotFoundException e) {
+        System.out.println("An error occurred.");
+        e.printStackTrace();
+      } 
     return charac;
   }
 
@@ -303,6 +318,12 @@ public class readFile {
       fw2.write(fw_u);
     }
     fw.close();
+  }
+
+  public static String getFileExtension(String fullName) {
+    String fileName = new File(fullName).getName();
+    int dotIndex = fileName.lastIndexOf('.');
+    return (dotIndex == -1) ? "" : fileName.substring(dotIndex + 1);
   }
 
 }
