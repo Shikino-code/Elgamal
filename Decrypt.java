@@ -9,7 +9,7 @@ public class Decrypt extends Encrypt {
     static String CipherText, Key, Padding;
     static Scanner sc = new Scanner(System.in);
 
-    public static void main() {
+    public static void main(String args[]) {
         Input();
 
         System.out.println("====Read FileText=====");

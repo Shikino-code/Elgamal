@@ -11,23 +11,29 @@ public class Encrypt {
     static int extraZero = 0;
     static int dataForEachBlocks;
 
-    public static void main() throws IOException {
+    public static void main(String args[]) throws IOException {
         Input();
         System.out.println("====Read FileText=====");
         String textFile = readfiles(TextFile);
+
         System.out.println("====Read FileKey=====");
         String PkText = readfiles(InputKey);
-        String[] pgk = spilts(PkText); // PK file
+        String[] pgy = spilts(PkText); // PK file
+
         System.out.println("====Convert FileText to Binary====");
         String textBinary = convertStringtoBinary(textFile);
         System.out.println(textBinary);
+
         System.out.println("====Add padding in file====");
-        String[] Arr = addPadding(textBinary, textFile, pgk);
-        long[] ArrLong = BinaryToDecimal(Arr);
+        String[] Padded = addPadding(textBinary, textFile, pgy);
+        long[] PaddedDecimmal = BinaryToDecimal(Padded);
+
         System.out.println("====Encrypt=====");
-        String[] encrypt = Encrypts(ArrLong, pgk);
+        String[] encrypt = Encrypts(PaddedDecimmal, pgy);
+
         System.out.println("====Export Encrypt====");
         System.out.println("Cipher Text: "+Arrays.toString(encrypt));
+        
         System.out.println("====etc file====");
         FileWriter(encrypt,extraZero,dataForEachBlocks);
     }
@@ -86,7 +92,7 @@ public class Encrypt {
         dataForEachBlocks = (int) (Math.log(sp - 1) / Math.log(2));
 
        
-        System.out.println("Textbinary before add zero: " + textBinary.length());
+        System.out.println("Textbinary before add zero: " + textBinary.length() + " bits");
         //Check The last block already Full?
         while (check == true) {
             if (textBinary.length() % dataForEachBlocks != 0) {
@@ -96,12 +102,12 @@ public class Encrypt {
                 check = false;
         }
 
-        System.out.println("Extra Zero: " + extraZero);
+        System.out.println("Add zero padding : " + extraZero + " bits");
 
-        System.out.println("Data for each Block: "+dataForEachBlocks);
-        System.out.println("Total Blocks: "+(textBinary.length() / dataForEachBlocks));
+        System.out.println("Data for each Block: "+dataForEachBlocks+ " bits");
+        System.out.println("Total Blocks: "+(textBinary.length() / dataForEachBlocks)+" blocks");
 
-        System.out.println("Textbinary after add zero: " + textBinary.length());
+        System.out.println("Textbinary after add zero: " + textBinary.length() + " bits");
         
         //split textBinry after add 0 
         String[] spiltTextBinary = textBinary.split("");
@@ -181,24 +187,23 @@ public class Encrypt {
         return res;
     }
     //encrypts a b 
-    public static String[] Encrypts(long[] arrLong, String[] pgk) {
-        String[] AB = new String[arrLong.length];
-        long p = Long.parseLong(pgk[0]);
+    public static String[] Encrypts(long[] PaddedDecimmal, String[] pgk) {
+        String[] AB = new String[PaddedDecimmal.length];
+        long sp = Long.parseLong(pgk[0]);
         long g = Long.parseLong(pgk[1]);
         long y = Long.parseLong(pgk[2]);
-        for (int i = 0; i < arrLong.length; i++) {
+        for (int i = 0; i < PaddedDecimmal.length; i++) {
             boolean check = true;
             long gcd = 0L;
             while (check == true) {
-                long k = 1 + (long) (Math.random() * (p - 1));
+                long k = 1 + (long) (Math.random() * (sp - 1));
                 if (gcd != 1L) {
-                    gcd = gcdExtended(k, p - 1);
+                    gcd = gcdExtended(k, sp - 1);
                 } else {
-                    long a = power(g, k, p);
-                    long b = power(y, k, p);
-                    b *= arrLong[i];
-                    // System.out.println("a: " + a);
-                    // System.out.println("b: " + b);
+                    long a = power(g, k, sp);
+                    long b = power(y, k, sp); // y^k
+                    b = (b * PaddedDecimmal[i]) % sp; //b = (y^k) * Plaintext mod sp
+
                     AB[i] = a + " " + b;
                     check = false;
                 }

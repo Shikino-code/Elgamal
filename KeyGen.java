@@ -21,7 +21,7 @@ public class KeyGen {
   static long bits;
   static String Filename;
 
-  public static void main() throws IOException {
+  public static void main(String[] args) throws IOException {
 
     System.out.println("====Input====");
     String file = Input();
@@ -119,7 +119,7 @@ public class KeyGen {
     System.out.println("====Check====");
 
     // How many numbers does each block have and must be less long datatype
-    System.out.println("input bit less than " + (long) (Math.log(Long.MAX_VALUE) / Math.log(2) / 2));
+    System.out.println("input bit less than " + (long) (Math.log(Long.MAX_VALUE) / Math.log(2) / 2)+" for find SafePrime");
     bits = sc.nextInt();
 
     if (bits < (long) (Math.log(Long.MAX_VALUE) / Math.log(2) / 2)) {
@@ -254,7 +254,7 @@ public class KeyGen {
     return res;
   }
 
-  // Find Generator
+  // Find Generator by lehman test
   public static long FineKeyGen(long SafePrime) {
     long a = 1 + (long) (Math.random() * (SafePrime - 1));
     long pow = ((SafePrime - 1) / 2);
