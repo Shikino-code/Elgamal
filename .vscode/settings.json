@@ -30,6 +30,8 @@
         "JarFile/commons-codec-1.15-sources.jar",
         "JarFile/commons-codec-1.15-tests.jar",
         "JarFile/commons-codec-1.15-test-sources.jar",
-        "JarFile/org-apache-commons-codec.jar"
+        "JarFile/org-apache-commons-codec.jar",
+        "JarFile/sun.misc.BASE64Decoder.jar",
+        "JarFile/base64-0.6.1.jar"
     ]
 }

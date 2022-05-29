@@ -205,17 +205,19 @@ public class Decrypt extends Encrypt {
                 .map(Character::toString)
                 .collect(Collectors.joining()); // cut the space
 
-        System.out.print(plainText);
+        System.out.println(plainText);
         FileWriter(plainText);
     }
 
     public static void FileWriter(String plainText)
             throws IOException {
 
-        File myObj = new File("Message.txt");
+        System.out.println("====Input for Plain text name ====");
+        String PlainText = sc.nextLine();
+        File myObj = new File(PlainText);
 
         myObj.createNewFile();
-        FileWriter fw = new FileWriter("Message.txt", true);
+        FileWriter fw = new FileWriter(PlainText, true);
 
         fw.write(plainText);
         fw.close();

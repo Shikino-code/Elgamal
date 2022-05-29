@@ -1,13 +1,9 @@
 import java.io.ByteArrayOutputStream;
 import java.io.File; // Import the File class
-// import java.io.FileInputStream;
+
 import java.io.FileNotFoundException; // Import this class to handle errors
 import java.awt.image.BufferedImage;
-// import java.io.BufferedReader;
-// import java.io.FileReader;
-// import java.util.ArrayList;
-// import java.util.Arrays;
-// import java.util.List;
+
 import java.util.Scanner; // Import the Scanner class to read text files
 import org.apache.xerces.impl.dv.util.Base64;
 

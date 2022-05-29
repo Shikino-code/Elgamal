@@ -10,10 +10,8 @@ public class Menu {
         System.out.println("1: Generate Key");
         System.out.println("2: Encryption");
         System.out.println("3: Decryption");
-        System.out.println("4: Hash");
-        System.out.println("5: Signature");
-        System.out.println("6: Verify");
-        System.out.println("7: Exit program");
+        System.out.println("4: Convert message to picture");
+        System.out.println("5: Exit program");
         System.out.println("--------");
         System.out.print("input number: ");
         int i = sc.nextInt();
@@ -28,11 +26,14 @@ public class Menu {
             case 3:
                 Decrypt.main(args);
                 break;
-            case 7:
+            case 4:
+                Gen64ToImage.main(args);
+                break;
+            case 5:
                 System.out.println("--------");
                 System.out.println("Goodbye");
-                System.exit(0);
                 System.out.println("--------");
+                System.exit(0);
                 break;
             default:
                 System.out.println("--------");
