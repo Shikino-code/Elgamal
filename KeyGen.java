@@ -16,10 +16,6 @@ import org.apache.tools.ant.filters.ReplaceTokens.Token;
 import java.io.FileWriter; //import the FileWriter class to write text files
 import java.io.IOException; // Import the IOException class
 
-
-
-
-
 public class KeyGen {
   static Scanner sc = new Scanner(System.in);
   static long bits;
@@ -27,14 +23,12 @@ public class KeyGen {
 
   public static void main(String[] args) throws IOException {
 
-    System.out.println("====Input====");
+    System.out.println("====Input file name or Text====");
     String file = Input();
-
+    String typeInput = getFileExtension(file);
 
     System.out.println("====Read File====");
-    String text = readFile(file);
-    
-
+    String text = readInput(file, typeInput);
 
     System.out.println("====Convert====");
     String num = convertStringtoBinary(text);
@@ -59,37 +53,47 @@ public class KeyGen {
     CreateKey(Generator, SafePrime);
   }
 
-
   // Input
   public static String Input() {
 
-    System.out.println("input Filename");
+    System.out.println("input");
     Filename = sc.nextLine();
-
     return Filename;
   }
 
   // ReadFile from .txt
-  public static String readFile(String filename) {
+  public static String readInput(String filename, String type) {
     String data = "";
-    try {
+    if (type.equals( "txt")) {
+      try {
         File myObj = new File(filename);
         Scanner myReader = new Scanner(myObj);
 
         // we use While Loop because if textfile have nextLine while loop can fix it
         while (myReader.hasNextLine()) {
-            data += myReader.nextLine() + "\n";
+          data += myReader.nextLine() + "\n";
         }
-        
+
         myReader.close();
 
-    } catch (FileNotFoundException e) {
+      } catch (FileNotFoundException e) {
         System.out.println("An error occurred, File is not found");
         e.printStackTrace();
+      }
+      System.out.print(data);
+    } else {
+      Scanner myReader = new Scanner(filename);
+
+      // we use While Loop because if textfile have nextLine while loop can fix it
+      while (myReader.hasNextLine()) {
+        data += myReader.nextLine() + "\n";
+      }
+      System.out.print(data);
+      myReader.close();
     }
-    System.out.print(data);
+
     return data;
-}
+  }
 
   // Check Safe Prime
   public static long CheckPrime(long decimal) {
@@ -112,7 +116,7 @@ public class KeyGen {
     return n;
   }
 
-  //ConvertStringToBinary
+  // ConvertStringToBinary
   public static String convertStringtoBinary(String text) {
     StringBuilder result = new StringBuilder();
     char[] chars = text.toCharArray();
@@ -130,7 +134,8 @@ public class KeyGen {
     System.out.println("====Check====");
 
     // How many numbers does each block have and must be less long datatype
-    System.out.println("input bit less than " + (long) (Math.log(Long.MAX_VALUE) / Math.log(2) / 2)+" for find SafePrime");
+    System.out
+        .println("input bit less than " + (long) (Math.log(Long.MAX_VALUE) / Math.log(2) / 2) + " for find SafePrime");
     bits = sc.nextInt();
 
     if (bits < (long) (Math.log(Long.MAX_VALUE) / Math.log(2) / 2)) {

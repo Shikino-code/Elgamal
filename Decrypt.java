@@ -203,7 +203,7 @@ public class Decrypt extends Encrypt {
                 .map(Character::toString)
                 .collect(Collectors.joining()); // cut the space
         
-        System.out.println(plainText);
+        System.out.print(plainText);
         System.out.println("--------");
     }
 

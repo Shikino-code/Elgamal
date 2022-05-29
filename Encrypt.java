@@ -13,11 +13,14 @@ public class Encrypt {
 
     public static void main(String[] args) throws IOException {
         Input();
-        System.out.println("====Read FileText=====");
-        String textFile = readFile(TextFile);
+        String typeInput = getFileExtension(TextFile);
+        String typeInput2 = getFileExtension(InputKey);
+
+        System.out.println("====Read Input=====");
+        String textFile = readInput(TextFile,typeInput);
 
         System.out.println("====Read FileKey=====");
-        String PkText = readFile(InputKey);
+        String PkText = readInput(InputKey,typeInput2);
         String[] pgy = spilts(PkText); // PK file
 
         System.out.println("====Convert FileText to Binary====");
@@ -40,32 +43,44 @@ public class Encrypt {
 
     // Input
     public static void Input() {
-        System.out.println("====TextFile====");
+        System.out.println("====Input file name or Text====");
         TextFile = sc.nextLine();
         System.out.println("=====KeyFile=====");
         InputKey = sc.nextLine();
     }
 
     // Readfile from .txt
-    public static String readFile(String filename) {
+    public static String readInput(String filename, String type) {
         String data = "";
-        try {
-            File myObj = new File(filename);
-            Scanner myReader = new Scanner(myObj);
+    if (type.equals( "txt")) {
+      try {
+        File myObj = new File(filename);
+        Scanner myReader = new Scanner(myObj);
 
-            // we use While Loop because if textfile have nextLine while loop can fix it
-            while (myReader.hasNextLine()) {
-                data += myReader.nextLine() + "\n";
-            }
-            System.out.println(data);
-            // System.out.println("Number of bits is : " + bit);
-            myReader.close();
-
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred, File is not found");
-            e.printStackTrace();
+        // we use While Loop because if textfile have nextLine while loop can fix it
+        while (myReader.hasNextLine()) {
+          data += myReader.nextLine() + "\n";
         }
-        return data;
+
+        myReader.close();
+
+      } catch (FileNotFoundException e) {
+        System.out.println("An error occurred, File is not found");
+        e.printStackTrace();
+      }
+      System.out.print(data);
+    } else {
+      Scanner myReader = new Scanner(filename);
+
+      // we use While Loop because if textfile have nextLine while loop can fix it
+      while (myReader.hasNextLine()) {
+        data += myReader.nextLine() + "\n";
+      }
+      System.out.print(data);
+      myReader.close();
+    }
+
+    return data;
     }
 
     // Convert String in file to binary
@@ -239,6 +254,12 @@ public class Encrypt {
         fw.write(extraZero + " ");
         fw.write(new Integer(dataInBlock).toString());
         fw.close();
+    }
+
+    public static String getFileExtension(String fullName) {
+        String fileName = new File(fullName).getName();
+        int dotIndex = fileName.lastIndexOf('.');
+        return (dotIndex == -1) ? "" : fileName.substring(dotIndex + 1);
     }
 
 }
