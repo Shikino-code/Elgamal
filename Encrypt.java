@@ -1,9 +1,15 @@
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import org.apache.xerces.impl.dv.util.Base64;
+
 import java.util.Arrays;
 import java.util.Scanner; // Import the Scanner class to read text files
+
+import javax.imageio.ImageIO;
 
 public class Encrypt {
     static String TextFile, InputKey;
@@ -69,6 +75,17 @@ public class Encrypt {
                 e.printStackTrace();
             }
             System.out.print(data);
+        } else if (type.equals("png") || type.equals("jpg")) {
+            try {
+                BufferedImage sourceimage = ImageIO.read(new File(filename));
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                ImageIO.write(sourceimage, type, bytes);
+                String resultantimage = Base64.encode(bytes.toByteArray());
+                data = resultantimage;
+                System.out.println(data);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             Scanner myReader = new Scanner(filename);
 

@@ -1,17 +1,19 @@
 import java.io.ByteArrayOutputStream;
 import java.io.File; // Import the File class
+// import java.io.FileInputStream;
 import java.io.FileNotFoundException; // Import this class to handle errors
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.awt.image.BufferedImage;
+// import java.io.BufferedReader;
+// import java.io.FileReader;
+// import java.util.ArrayList;
+// import java.util.Arrays;
+// import java.util.List;
 import java.util.Scanner; // Import the Scanner class to read text files
+import org.apache.xerces.impl.dv.util.Base64;
 
 import javax.imageio.ImageIO;
 
-import org.apache.tools.ant.filters.ReplaceTokens.Token;
+// import org.apache.tools.ant.filters.ReplaceTokens.Token;
 
 import java.io.FileWriter; //import the FileWriter class to write text files
 import java.io.IOException; // Import the IOException class
@@ -62,16 +64,16 @@ public class KeyGen {
   }
 
   // ReadFile from .txt
-  public static String readInput(String filename, String type) {
-    String data = "";
-    if (type.equals( "txt")) {
+  public static String readInput(String filename, String type) throws IOException {
+    String result = "";
+    if (type.equals("txt")) {
       try {
         File myObj = new File(filename);
         Scanner myReader = new Scanner(myObj);
 
         // we use While Loop because if textfile have nextLine while loop can fix it
         while (myReader.hasNextLine()) {
-          data += myReader.nextLine() + "\n";
+          result += myReader.nextLine() + "\n";
         }
 
         myReader.close();
@@ -80,19 +82,31 @@ public class KeyGen {
         System.out.println("An error occurred, File is not found");
         e.printStackTrace();
       }
-      System.out.print(data);
+      System.out.print(result);
+    } else if (type.equals("png") || type.equals("jpg")) {
+      try {
+        BufferedImage sourceimage = ImageIO.read(new File(filename));
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        ImageIO.write(sourceimage, type, bytes);
+        String resultantimage = Base64.encode(bytes.toByteArray());
+        result = resultantimage;
+        System.out.println(resultantimage);
+      } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("Error??");
+      }
     } else {
       Scanner myReader = new Scanner(filename);
 
       // we use While Loop because if textfile have nextLine while loop can fix it
       while (myReader.hasNextLine()) {
-        data += myReader.nextLine() + "\n";
+        result += myReader.nextLine() + "\n";
       }
-      System.out.print(data);
+      System.out.print(result);
       myReader.close();
     }
 
-    return data;
+    return result;
   }
 
   // Check Safe Prime

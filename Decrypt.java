@@ -206,7 +206,6 @@ public class Decrypt extends Encrypt {
                 .collect(Collectors.joining()); // cut the space
 
         System.out.print(plainText);
-        System.out.println("--------");
         FileWriter(plainText);
     }
 

@@ -4,8 +4,8 @@ import java.util.Scanner;
 public class Menu {
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
-
-        System.out.println("--------");
+        
+        System.out.println("");
         System.out.println("Select 1, 2, 3, 4, 5 or 6");
         System.out.println("1: Generate Key");
         System.out.println("2: Encryption");
