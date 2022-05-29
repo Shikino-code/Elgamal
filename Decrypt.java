@@ -8,7 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import java.util.stream.Collectors;
 
 public class Decrypt extends Encrypt {
-    static String CipherText, Key, Padding;
+    static String CipherText, Key, InputEtc;
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
@@ -16,33 +16,33 @@ public class Decrypt extends Encrypt {
 
         System.out.println("====Read FileText=====");
         String cipherText = readfiles(CipherText);
-
+        
         System.out.println("====Read FileKey=====");
         String pgu = readfiles(Key);
 
         System.out.println("====Read ETCFile=====");
-        String PaddingText = readfiles(Padding);
+        String ETC = readfiles(InputEtc);
 
         System.out.println("====sort====");
         System.out.println("---etc---");
-        String[] etc = splits(PaddingText);
+        String[] splitEtc = splits(ETC);
 
         System.out.println("---Cipher Text Spilt After split---");
         String[] cipherTextSpilt = splits(cipherText);
 
         System.out.println("--- SK File---");
-        String[] Sktext = splits(pgu);
+        String[] SK = splits(pgu);
 
         System.out.println("====Decrypt====");
-        long[] result = Decrypts(cipherTextSpilt, Sktext);
+        long[] result = Decrypts(cipherTextSpilt, SK);
 
         System.out.println("====Convert to Binary====");
-        String[] binary = converDataTypeToString(result, etc);
+        String[] binary = converDataTypeToString(result, splitEtc);
 
         System.out.println("====Delete Padding====");
-        String[] BinaryFinish = DeletePadding(binary, etc);
+        String[] BinaryFinish = DeletePadding(binary, splitEtc);
 
-        System.out.println("====Resemble Binart Text====");
+        System.out.println("====Combine Binary Text====");
         String reform = reformBinary(BinaryFinish);
 
         System.out.println("=====Convert to Text=====");
@@ -58,7 +58,7 @@ public class Decrypt extends Encrypt {
         Key = sc.nextLine();
 
         System.out.println("=====ETCFile=====");
-        Padding = sc.nextLine();
+        InputEtc = sc.nextLine();
     }
 
     public static String readfiles(String Filename) {
@@ -101,9 +101,9 @@ public class Decrypt extends Encrypt {
     }
 
     // decrypt with p,u,cyphertext
-    public static long[] Decrypts(String[] CipherTextSplits, String[] SkText) {
-        long p = Long.parseLong(SkText[0]);
-        long u = Long.parseLong(SkText[2]);
+    public static long[] Decrypts(String[] CipherTextSplits, String[] SK) {
+        long p = Long.parseLong(SK[0]);
+        long u = Long.parseLong(SK[2]);
 
         System.out.println("p: " + p);
         System.out.println("u: " + u);
