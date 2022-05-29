@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 import org.apache.commons.lang.StringUtils;
@@ -9,7 +11,7 @@ public class Decrypt extends Encrypt {
     static String CipherText, Key, Padding;
     static Scanner sc = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Input();
 
         System.out.println("====Read FileText=====");
@@ -23,7 +25,7 @@ public class Decrypt extends Encrypt {
 
         System.out.println("====sort====");
         System.out.println("---etc---");
-        String[] etc = splits(PaddingText); 
+        String[] etc = splits(PaddingText);
 
         System.out.println("---Cipher Text Spilt After split---");
         String[] cipherTextSpilt = splits(cipherText);
@@ -76,7 +78,7 @@ public class Decrypt extends Encrypt {
         return charac;
     }
 
-    //spilt a b
+    // spilt a b
     public static String[] splits(String CypherText) {
         String[] splited = CypherText.split("\\s+");
         System.out.println("spilt: " + Arrays.toString(splited));
@@ -98,7 +100,7 @@ public class Decrypt extends Encrypt {
         return res;
     }
 
-    //decrypt with p,u,cyphertext
+    // decrypt with p,u,cyphertext
     public static long[] Decrypts(String[] CipherTextSplits, String[] SkText) {
         long p = Long.parseLong(SkText[0]);
         long u = Long.parseLong(SkText[2]);
@@ -112,10 +114,11 @@ public class Decrypt extends Encrypt {
         int r = 1;
         int r2 = 0;
         long power = p - 1 - u;
-        
+
         for (int i = 0; i < result.length; i++) {
 
-            result[i] = (Long.parseLong(CipherTextSplits[r]) * power(Long.parseLong(CipherTextSplits[r2]), power, p)) % p;
+            result[i] = (Long.parseLong(CipherTextSplits[r]) * power(Long.parseLong(CipherTextSplits[r2]), power, p))
+                    % p;
             r += 2;
             r2 += 2;
         }
@@ -124,7 +127,6 @@ public class Decrypt extends Encrypt {
         return result;
     }
 
-    
     public static String[] converDataTypeToString(long[] result, String[] etc) {
         int boxsize = Integer.valueOf(etc[1]);
 
@@ -141,7 +143,7 @@ public class Decrypt extends Encrypt {
         return results;
     }
 
-    //delete 0 that we add in encrypt
+    // delete 0 that we add in encrypt
     public static String[] DeletePadding(String[] binary, String[] etc) {
         String lastBlock = String.valueOf(binary[binary.length - 1]);
         int extra = Integer.valueOf(etc[0]);
@@ -160,7 +162,7 @@ public class Decrypt extends Encrypt {
         }
         System.out.println("Delete Padding: " + Arrays.toString(deletePaddingArr));
 
-        //Add data after delete padding to last block
+        // Add data after delete padding to last block
         for (int i = 0; i < deletePaddingArr.length; i++) {
             if (i == 0) {
                 binary[binary.length - 1] = deletePaddingArr[i];
@@ -182,29 +184,42 @@ public class Decrypt extends Encrypt {
         for (int i = 0; i < binaryText.length; i++) {
             binary += binaryText[i];
         }
-        
+
         String[] temp = binary.split("");
         int condi = ((temp.length / 8) + (temp.length % 8));
-        
+
         for (int i = 0; i < condi; i++) {
             for (int j = 0; j < 8; j++) {
                 result += temp[k++];
             }
             result += " ";
-            //System.out.println("reform binary text: "+result);
+            // System.out.println("reform binary text: "+result);
         }
         System.out.println("Result ressemble: " + result);
         return result;
     }
 
-    public static void StringToBinary(String reform) {
+    public static void StringToBinary(String reform) throws IOException {
         String plainText = Arrays.stream(reform.split(" "))
                 .map(binary -> Integer.parseInt(binary, 2))
                 .map(Character::toString)
                 .collect(Collectors.joining()); // cut the space
-        
+
         System.out.print(plainText);
         System.out.println("--------");
+        FileWriter(plainText);
+    }
+
+    public static void FileWriter(String plainText)
+            throws IOException {
+
+        File myObj = new File("Message.txt");
+
+        myObj.createNewFile();
+        FileWriter fw = new FileWriter("Message.txt", true);
+
+        fw.write(plainText);
+        fw.close();
     }
 
 }

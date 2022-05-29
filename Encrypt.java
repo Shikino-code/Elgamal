@@ -17,10 +17,10 @@ public class Encrypt {
         String typeInput2 = getFileExtension(InputKey);
 
         System.out.println("====Read Input=====");
-        String textFile = readInput(TextFile,typeInput);
+        String textFile = readInput(TextFile, typeInput);
 
         System.out.println("====Read FileKey=====");
-        String PkText = readInput(InputKey,typeInput2);
+        String PkText = readInput(InputKey, typeInput2);
         String[] pgy = spilts(PkText); // PK file
 
         System.out.println("====Convert FileText to Binary====");
@@ -37,7 +37,7 @@ public class Encrypt {
         System.out.println("====Export Encrypt====");
         System.out.println("Cipher Text: " + Arrays.toString(encrypt));
 
-        System.out.println("====etc file====");
+        System.out.println("====File writer====");
         FileWriter(encrypt, extraZero, dataForEachBlocks);
     }
 
@@ -52,35 +52,35 @@ public class Encrypt {
     // Readfile from .txt
     public static String readInput(String filename, String type) {
         String data = "";
-    if (type.equals( "txt")) {
-      try {
-        File myObj = new File(filename);
-        Scanner myReader = new Scanner(myObj);
+        if (type.equals("txt")) {
+            try {
+                File myObj = new File(filename);
+                Scanner myReader = new Scanner(myObj);
 
-        // we use While Loop because if textfile have nextLine while loop can fix it
-        while (myReader.hasNextLine()) {
-          data += myReader.nextLine() + "\n";
+                // we use While Loop because if textfile have nextLine while loop can fix it
+                while (myReader.hasNextLine()) {
+                    data += myReader.nextLine() + "\n";
+                }
+
+                myReader.close();
+
+            } catch (FileNotFoundException e) {
+                System.out.println("An error occurred, File is not found");
+                e.printStackTrace();
+            }
+            System.out.print(data);
+        } else {
+            Scanner myReader = new Scanner(filename);
+
+            // we use While Loop because if textfile have nextLine while loop can fix it
+            while (myReader.hasNextLine()) {
+                data += myReader.nextLine() + "\n";
+            }
+            System.out.print(data);
+            myReader.close();
         }
 
-        myReader.close();
-
-      } catch (FileNotFoundException e) {
-        System.out.println("An error occurred, File is not found");
-        e.printStackTrace();
-      }
-      System.out.print(data);
-    } else {
-      Scanner myReader = new Scanner(filename);
-
-      // we use While Loop because if textfile have nextLine while loop can fix it
-      while (myReader.hasNextLine()) {
-        data += myReader.nextLine() + "\n";
-      }
-      System.out.print(data);
-      myReader.close();
-    }
-
-    return data;
+        return data;
     }
 
     // Convert String in file to binary
@@ -234,8 +234,11 @@ public class Encrypt {
     public static void FileWriter(String[] encrypt, int extraZero, int dataForEachBlocks)
             throws IOException {
 
+        System.out.println("====Input for CipherText name ====");
+        String CipherText = sc.nextLine();
+
         int dataInBlock = dataForEachBlocks;
-        File myObj2 = new File("CipherText.txt");
+        File myObj2 = new File(CipherText);
         File myObj = new File("Etc.txt");
 
         myObj.createNewFile();
@@ -245,12 +248,13 @@ public class Encrypt {
         System.out.println("Data For Each Blocks: " + dataForEachBlocks);
 
         FileWriter fw = new FileWriter("Etc.txt", true);
-        try (FileWriter fw2 = new FileWriter("CipherText.txt", true)) {
+        try (FileWriter fw2 = new FileWriter(CipherText, true)) {
             for (int i = 0; i < encrypt.length; i++) {
                 fw2.write(encrypt[i] + " ");
             }
         }
 
+        System.out.println("----Etc.txt use for Decryption----");
         fw.write(extraZero + " ");
         fw.write(new Integer(dataInBlock).toString());
         fw.close();
