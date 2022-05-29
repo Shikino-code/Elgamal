@@ -2,17 +2,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.File; // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner; // Import the Scanner class to read text files
 
 import javax.imageio.ImageIO;
 
+import org.apache.tools.ant.filters.ReplaceTokens.Token;
+
 import java.io.FileWriter; //import the FileWriter class to write text files
 import java.io.IOException; // Import the IOException class
-import java.nio.file.Files;
 
-import java.io.*;
-import java.awt.image.*;
-import javax.imageio.*;
+
 
 
 
@@ -28,7 +32,9 @@ public class KeyGen {
 
 
     System.out.println("====Read File====");
-    String text = readfiles(file);
+    String text = readFile(file);
+    
+
 
     System.out.println("====Convert====");
     String num = convertStringtoBinary(text);
@@ -53,6 +59,7 @@ public class KeyGen {
     CreateKey(Generator, SafePrime);
   }
 
+
   // Input
   public static String Input() {
 
@@ -63,22 +70,26 @@ public class KeyGen {
   }
 
   // ReadFile from .txt
-  public static String readfiles(String Filename) {
-    String charac = "";
-      try {
-        File myObj = new File(Filename);
+  public static String readFile(String filename) {
+    String data = "";
+    try {
+        File myObj = new File(filename);
         Scanner myReader = new Scanner(myObj);
+
+        // we use While Loop because if textfile have nextLine while loop can fix it
         while (myReader.hasNextLine()) {
-          charac = myReader.nextLine();
-          System.out.println(charac);
+            data += myReader.nextLine() + "\n";
         }
+        
         myReader.close();
-      } catch (FileNotFoundException e) {
-        System.out.println("An error occurred.");
+
+    } catch (FileNotFoundException e) {
+        System.out.println("An error occurred, File is not found");
         e.printStackTrace();
-      } 
-    return charac;
-  }
+    }
+    System.out.print(data);
+    return data;
+}
 
   // Check Safe Prime
   public static long CheckPrime(long decimal) {
@@ -101,7 +112,7 @@ public class KeyGen {
     return n;
   }
 
-  // ConvertStringToBinary
+  //ConvertStringToBinary
   public static String convertStringtoBinary(String text) {
     StringBuilder result = new StringBuilder();
     char[] chars = text.toCharArray();

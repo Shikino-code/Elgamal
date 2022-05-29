@@ -9,14 +9,14 @@ public class Decrypt extends Encrypt {
     static String CipherText, Key, Padding;
     static Scanner sc = new Scanner(System.in);
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         Input();
 
         System.out.println("====Read FileText=====");
         String cipherText = readfiles(CipherText);
 
         System.out.println("====Read FileKey=====");
-        String SkText = readfiles(Key);
+        String pgu = readfiles(Key);
 
         System.out.println("====Read ETCFile=====");
         String PaddingText = readfiles(Padding);
@@ -29,7 +29,7 @@ public class Decrypt extends Encrypt {
         String[] cipherTextSpilt = splits(cipherText);
 
         System.out.println("--- SK File---");
-        String[] Sktext = splits(SkText);
+        String[] Sktext = splits(pgu);
 
         System.out.println("====Decrypt====");
         long[] result = Decrypts(cipherTextSpilt, Sktext);
@@ -202,8 +202,9 @@ public class Decrypt extends Encrypt {
                 .map(binary -> Integer.parseInt(binary, 2))
                 .map(Character::toString)
                 .collect(Collectors.joining()); // cut the space
-
-        System.out.println("Messaage = "+plainText);
+        
+        System.out.println(plainText);
+        System.out.println("--------");
     }
 
 }

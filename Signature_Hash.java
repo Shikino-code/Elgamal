@@ -18,10 +18,12 @@ public class Signature_Hash {
     Input();
     System.out.println("====ReadFile====");
     String text = readfiles(Filename);
+
     System.out.println("====Hash====");
     String Hash = toHexString(getSHA(text));
     System.out.println("Hash = " + Hash);
-     FileWriter(Hash);
+
+    FileWriter(Hash);
   }
 
   public static void Input() {

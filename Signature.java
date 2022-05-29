@@ -12,16 +12,22 @@ public class Signature {
     public static void main(String[] args) {
         System.out.println("====HashTextFile====");
         TextFile = sc.nextLine();
+
         System.out.println("====SKTextFile====");
         TextFile2 = sc.nextLine();
+
         System.out.println("====PKTextFile====");
         TextFile3 = sc.nextLine();
+
         System.out.println("====Read FileText=====");
         String textFile = readfiles(TextFile);
+
         System.out.println("====Read FileKey=====");
         String textFile2 = readfiles(TextFile2);
+
         System.out.println("====Read FileKey=====");
         String textFile3 = readfiles(TextFile3);
+        
         // String[] arrOfStr = textFile.split("", 8);
         String textBinary = convertStringtoBinary(textFile);
         System.out.println("textBinary = " + textBinary);

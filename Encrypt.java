@@ -11,13 +11,13 @@ public class Encrypt {
     static int extraZero = 0;
     static int dataForEachBlocks;
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String[] args) throws IOException {
         Input();
         System.out.println("====Read FileText=====");
-        String textFile = readfiles(TextFile);
+        String textFile = readFile(TextFile);
 
         System.out.println("====Read FileKey=====");
-        String PkText = readfiles(InputKey);
+        String PkText = readFile(InputKey);
         String[] pgy = spilts(PkText); // PK file
 
         System.out.println("====Convert FileText to Binary====");
@@ -32,13 +32,13 @@ public class Encrypt {
         String[] encrypt = Encrypts(PaddedDecimmal, pgy);
 
         System.out.println("====Export Encrypt====");
-        System.out.println("Cipher Text: "+Arrays.toString(encrypt));
-        
+        System.out.println("Cipher Text: " + Arrays.toString(encrypt));
+
         System.out.println("====etc file====");
-        FileWriter(encrypt,extraZero,dataForEachBlocks);
+        FileWriter(encrypt, extraZero, dataForEachBlocks);
     }
 
-    //Input
+    // Input
     public static void Input() {
         System.out.println("====TextFile====");
         TextFile = sc.nextLine();
@@ -46,25 +46,29 @@ public class Encrypt {
         InputKey = sc.nextLine();
     }
 
-    //Readfile from .txt
-    public static String readfiles(String Filename) {
-        String charac = "";
+    // Readfile from .txt
+    public static String readFile(String filename) {
+        String data = "";
         try {
-            File myObj = new File(Filename);
+            File myObj = new File(filename);
             Scanner myReader = new Scanner(myObj);
+
+            // we use While Loop because if textfile have nextLine while loop can fix it
             while (myReader.hasNextLine()) {
-                charac = myReader.nextLine();
-                System.out.println(charac);
+                data += myReader.nextLine() + "\n";
             }
+            System.out.println(data);
+            // System.out.println("Number of bits is : " + bit);
             myReader.close();
+
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.println("An error occurred, File is not found");
             e.printStackTrace();
         }
-        return charac;
+        return data;
     }
 
-    //Convert String in file to binary
+    // Convert String in file to binary
     public static String convertStringtoBinary(String text) {
         StringBuilder result = new StringBuilder();
         char[] chars = text.toCharArray();
@@ -83,17 +87,17 @@ public class Encrypt {
         System.out.println("decimal: " + Arrays.toString(decimal));
         return decimal;
     }
-    // sort including textBinary,textLength , PK 
+
+    // sort including textBinary,textLength , PK
     public static String[] addPadding(String textBinary, String textLength, String[] p) {
         String[] addPaddingArr;
         boolean check = true;
 
-        int sp = Integer.valueOf(p[0]); 
+        int sp = Integer.valueOf(p[0]);
         dataForEachBlocks = (int) (Math.log(sp - 1) / Math.log(2));
 
-       
         System.out.println("Textbinary before add zero: " + textBinary.length() + " bits");
-        //Check The last block already Full?
+        // Check The last block already Full?
         while (check == true) {
             if (textBinary.length() % dataForEachBlocks != 0) {
                 textBinary += "0";
@@ -104,19 +108,18 @@ public class Encrypt {
 
         System.out.println("Add zero padding : " + extraZero + " bits");
 
-        System.out.println("Data for each Block: "+dataForEachBlocks+ " bits");
-        System.out.println("Total Blocks: "+(textBinary.length() / dataForEachBlocks)+" blocks");
+        System.out.println("Data for each Block: " + dataForEachBlocks + " bits");
+        System.out.println("Total Blocks: " + (textBinary.length() / dataForEachBlocks) + " blocks");
 
         System.out.println("Textbinary after add zero: " + textBinary.length() + " bits");
-        
-        //split textBinry after add 0 
+
+        // split textBinry after add 0
         String[] spiltTextBinary = textBinary.split("");
 
-        //init block size
+        // init block size
         String[] result = new String[(textLength.length() * 8) / dataForEachBlocks];
 
-        
-        //check block size that fit binaryText after add padding
+        // check block size that fit binaryText after add padding
         if ((textLength.length() * 8) % dataForEachBlocks != 0) {
             addPaddingArr = new String[result.length + 1];
             for (int i = 0; i < result.length; i++) {
@@ -125,18 +128,17 @@ public class Encrypt {
         } else {
             addPaddingArr = new String[result.length];
             for (int i = 0; i < result.length; i++) {
-                addPaddingArr[i] = result[i];  
+                addPaddingArr[i] = result[i];
             }
         }
 
-             
-        int k = 0; //point data in arr spiltTextBinary
-        //add data in block
+        int k = 0; // point data in arr spiltTextBinary
+        // add data in block
         for (int i = 0; i < addPaddingArr.length; i++) {
             for (int j = 0; j < dataForEachBlocks; j++) {
                 if (addPaddingArr[i] == null) {
                     addPaddingArr[i] = spiltTextBinary[k++];
-                    
+
                 } else {
                     addPaddingArr[i] += spiltTextBinary[k++];
                 }
@@ -147,7 +149,7 @@ public class Encrypt {
         return addPaddingArr;
     }
 
-    //spilt PK file to p,g,y
+    // spilt PK file to p,g,y
     public static String[] spilts(String PkText) {
         String[] splited = PkText.split("\\s+");
         System.out.println("Spilt: " + Arrays.toString(splited));
@@ -186,7 +188,8 @@ public class Encrypt {
         }
         return res;
     }
-    //encrypts a b 
+
+    // encrypts a b
     public static String[] Encrypts(long[] PaddedDecimmal, String[] pgk) {
         String[] AB = new String[PaddedDecimmal.length];
         long sp = Long.parseLong(pgk[0]);
@@ -202,38 +205,38 @@ public class Encrypt {
                 } else {
                     long a = power(g, k, sp);
                     long b = power(y, k, sp); // y^k
-                    b = (b * PaddedDecimmal[i]) % sp; //b = (y^k) * Plaintext mod sp
+                    b = (b * PaddedDecimmal[i]) % sp; // b = (y^k) * Plaintext mod sp
 
                     AB[i] = a + " " + b;
                     check = false;
                 }
-            }         
+            }
         }
         System.out.println("AB[a(0) b(0),a(0) b(0),...,a(arrLong.length),b(arrLong.length)] = " + Arrays.toString(AB));
         return AB;
     }
 
-    public static void FileWriter(String[] encrypt,int extraZero,int dataForEachBlocks)
+    public static void FileWriter(String[] encrypt, int extraZero, int dataForEachBlocks)
             throws IOException {
-        
+
         int dataInBlock = dataForEachBlocks;
-        File myObj2 = new File("Ciphertext.txt");
-        File myObj = new File("etc.txt");
+        File myObj2 = new File("CipherText.txt");
+        File myObj = new File("Etc.txt");
 
         myObj.createNewFile();
         myObj2.createNewFile();
 
-        System.out.println("Extra Zero: "+extraZero);
-        System.out.println("Data For Each Blocks: "+dataForEachBlocks);
+        System.out.println("Extra Zero: " + extraZero);
+        System.out.println("Data For Each Blocks: " + dataForEachBlocks);
 
-        FileWriter fw = new FileWriter("etc.txt", true);
-        try (FileWriter fw2 = new FileWriter("Ciphertext.txt", true)) {
-            for(int i = 0; i < encrypt.length;i++){        
-                fw2.write(encrypt[i]+" ");
+        FileWriter fw = new FileWriter("Etc.txt", true);
+        try (FileWriter fw2 = new FileWriter("CipherText.txt", true)) {
+            for (int i = 0; i < encrypt.length; i++) {
+                fw2.write(encrypt[i] + " ");
             }
         }
 
-        fw.write(extraZero+" ");
+        fw.write(extraZero + " ");
         fw.write(new Integer(dataInBlock).toString());
         fw.close();
     }
