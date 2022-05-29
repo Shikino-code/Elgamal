@@ -1,5 +1,7 @@
 import java.io.File;
+import java.io.FileWriter;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -9,88 +11,25 @@ public class Signature {
     static int extraZero = 0;
     static int SPresult = 0;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.println("====HashTextFile====");
         TextFile = sc.nextLine();
-
-        System.out.println("====SKTextFile====");
+        System.out.println("====MessageTextFile====");
         TextFile2 = sc.nextLine();
-
         System.out.println("====PKTextFile====");
         TextFile3 = sc.nextLine();
-
         System.out.println("====Read FileText=====");
         String textFile = readfiles(TextFile);
-
-        System.out.println("====Read FileKey=====");
-        String textFile2 = readfiles(TextFile2);
-
+        // System.out.println("====Read FileText=====");
+        // String textFile2 = readfiles(TextFile2);
         System.out.println("====Read FileKey=====");
         String textFile3 = readfiles(TextFile3);
-        
-        // String[] arrOfStr = textFile.split("", 8);
         String textBinary = convertStringtoBinary(textFile);
         System.out.println("textBinary = " + textBinary);
         String[] pgk = sortPK(textFile3);
         String[] Arr = sortBinary(textBinary, textFile, pgk);
         long[] ArrLong = BinaryToDecimal(Arr);
-        String[] arrOfStr2 = textFile2.split(" ", 0);
-        String[] Sign = SignVerify(ArrLong, pgk, arrOfStr2);
-        //
-        // String[] arrOfStr2 = textFile2.split(" ", 0);
-        // String S_p_text = arrOfStr2[0];
-        // String S_g_text = arrOfStr2[1];
-        // String S_y_text = arrOfStr2[2];
-        // String S_x_text = arrOfStr3[2];
-        // System.out.println("Hash = " + Arrays.toString(arrOfStr));
-        // System.out.println("p = " + S_p_text);
-        // System.out.println("g = " + S_g_text);
-        // System.out.println("y = " + S_y_text);
-        // System.out.println("x = " + S_x_text);
-        // Sign
-        // long p = 11;
-        // long g = 2;
-        // long k = 7;
-        // long x = 3;
-        // long y = 8;
-        // long X = 9;
-        // // long k = 1 + (long) (Math.random() * (p - 1));
-        // System.out.println("p = " + p);
-        // System.out.println("k = " + k);
-        // // long k2 = 1 + (long) (Math.random() * (p - 1));
-        // // System.out.println("k2 = " + k2);
-        // long gcd = gcdExtended(k, p - 1);
-        // System.out.println("gcd = " + gcd);
-        // long i = inverse(k, p - 1);
-        // // long i2 = inverse(p - 1, k);
-        // System.out.println("inverse(k , p-1); = " + i);
-        // // System.out.println("inverse(p-1 , k); = " + i2);
-        // long r = FastExponential(g, k, p);
-        // System.out.println("r = " + r);
-        // long s = i * (X - (x * r)) % (p - 1);
-        // System.out.println("s = " + s);
-        // long sum = 0;
-        // if (s < 0) {
-        // // long sum = ((s *-1) % (p-1)) +(p-1);
-        // sum = (s % (p - 1)) + (p - 1);
-        // System.out.println("sum = " + sum);
-        // }
-        // // (X,r,s)
-        // System.out.println("(X,r,s) = " + X + r + sum);
-        // long gx = FastExponential(g, X, p);
-        // // verrify
-        // System.out.println("gx = " + gx);
-        // long yr = (FastExponential(y, r, p));
-        // long rs = (FastExponential(r, sum, p));
-        // long yr_rs = ((FastExponential(y, r, p)) * (FastExponential(r, sum, p)) % p);
-        // System.out.println("yr = " + yr);
-        // System.out.println("rs = " + rs);
-        // System.out.println("yr_rs = " + yr_rs);
-        // if (gx == yr_rs) {
-        // System.out.println("Comparison is valid");
-        // } else {
-        // System.out.println("Comparison is not valid");
-        // }
+        String[] Signature = Sign(ArrLong, pgk);
     }
 
     public static String readfiles(String Filename) {
@@ -169,19 +108,20 @@ public class Signature {
             // b^-1 = answer.
             inv = t1;
         }
-        System.out.println("inv = " + inv);
+        // System.out.println("inv = " + inv);
         return inv;
     }
 
-    public static String[] SignVerify(long[] arrLong, String[] pgk, String[] arrOfStr2) {
-        //long X = arrLong[0];
+    public static String[] Sign(long[] arrLong, String[] pgk) throws IOException {
+        // long X = arrLong[0];
         long p = Long.parseLong(pgk[0]);
         long g = Long.parseLong(pgk[1]);
-        long y = Long.parseLong(pgk[2]);
-        long x = Long.parseLong(arrOfStr2[2]);
+        long x = Long.parseLong(pgk[2]);
+        // long x = Long.parseLong(arrOfStr2[2]);
         int count;
         //// long k = 1 + (long) (Math.random() * (p - 1));
         for (int j = 0; j < arrLong.length; j++) {
+            count = j;
             long X = arrLong[j];
             boolean check = true;
             long gcd = 0;
@@ -191,18 +131,18 @@ public class Signature {
                     gcd = gcdExtended(k, p - 1);
                 } else {
                     // gcd = gcdExtended(k, p - 1);
-                    System.out.println("gcd = " + gcd);
-                    System.out.println("k = " +k);
-                    System.out.println("p = " +(p - 1));
+                    // System.out.println("gcd = " + gcd);
+                    // System.out.println("k = " +k);
+                    // System.out.println("p = " +(p - 1));
                     long i = inverse(k, p - 1);
                     while (i <= 0) {
                         k = 1 + (long) (Math.random() * (p - 1));
                         i = inverse(k, p - 1);
                         // System.out.println("k i<=0");
                     }
-                    System.out.println("inverse(k , p-1); = " + i);
+                    // System.out.println("inverse(k , p-1); = " + i);
                     long r = FastExponential(g, k, p);
-                    System.out.println("r = " + r);
+                    // System.out.println("r = " + r);
                     long s = i * (X - (x * r)) % (p - 1);
                     long sum = 0;
                     if (s < 0) {
@@ -213,33 +153,33 @@ public class Signature {
                     }
                     // (X,r,s)
                     System.out.println("(X,r,s) = " + "(" + X + "," + r + "," + sum + ")");
-                    long gx = FastExponential(g, X, p);
-                    System.out.println("g^x = " + gx);
-                    long yr = (FastExponential(y, r, p));
-                    long rs = (FastExponential(r, sum, p));
-                    System.out.println("yr = " + yr);
-                    System.out.println("rs = " + rs);
-                    long yr_rs = (yr) * (rs) % p;
-                    System.out.println("yr_rs = " + yr_rs);
-                    if (gx == yr_rs) {
-                        System.out.println("Comparison is valid");
-                        count = j;
-                        System.out.println("count = "+count);
-                        count++;
-                        if (count == arrLong.length) {
-                            System.out.println("All Comparison is valid");
-                        }
-                    } else {
-                        System.out.println("Comparison is not valid");
-                    }
-
+                    // verify
+                    // long gx = FastExponential(g, X, p);
+                    // System.out.println("g^x = " + gx);
+                    // long yr = (FastExponential(y, r, p));
+                    // long rs = (FastExponential(r, sum, p));
+                    // System.out.println("yr = " + yr);
+                    // System.out.println("rs = " + rs);
+                    // long yr_rs = (yr) * (rs) % p;
+                    // System.out.println("yr_rs = " + yr_rs);
+                    // if (gx == yr_rs) {
+                    // System.out.println("Comparison is valid");
+                    // count = j;
+                    // System.out.println("count = "+count);
+                    // count++;
+                    // if (count == arrLong.length) {
+                    // System.out.println("All Comparison is valid");
+                    // }
+                    // } else {
+                    // System.out.println("Comparison is not valid");
+                    // }
+                    FileWriter(X, r, sum, count);
                     check = false;
                 }
             }
         }
         return pgk;
     }
-
 
     public static String convertStringtoBinary(String text) {
         StringBuilder result = new StringBuilder();
@@ -315,5 +255,30 @@ public class Signature {
 
         System.out.println("decimal: " + Arrays.toString(decimal));
         return decimal;
+    }
+
+    public static void FileWriter(long X, long r, long sum, int count)
+            throws IOException {
+        long fw_X = X;
+        long fw_r = r;
+        long fw_sum = sum;
+        long fw_count = sum;
+        File myObj2 = new File("Singnature.txt");
+        File myObj3 = new File("COUNT.txt");
+        myObj2.createNewFile();
+        myObj3.createNewFile();
+        FileWriter fw = new FileWriter("Singnature.txt", true);
+        FileWriter fw2 = new FileWriter("COUNT.txt", true);
+        // for (int t = 0; t <= count; t++) {
+        fw.write(fw_X + " ");
+        fw.write(fw_r + " ");
+        fw.write(fw_sum + " ");
+        // }
+        // fw.write("///");
+        // fw.write(fw_count + " ");
+        // System.out.println("Completed writing into text file");
+        fw.close();
+        fw2.write(fw_count + " ");
+        fw2.close();
     }
 }
